@@ -21,8 +21,9 @@ class Products(models.Model):
 
     @api.depends('qr_code')
     def generate_qr(self):
-        if not qrcode:
-            raise UserError(_('N˜ao foi possivel gerar o QR Code. Verifique se o produto contám o campo QR Code preenchido.'))
+        logging.warning("GERANDO QR %s", self.qr_code)
+        if self.qr_code == False:
+            raise UserError(_('Não foi possivel gerar o QR Code. Verifique se o produto contám o campo QR Code preenchido.'))
         else:
             qr = qrcode.QRCode(
                 version=4,
