@@ -22,21 +22,22 @@
                             </style>
                             <div class="page">
                                 <center>
-                                <table>
-                                    <tr>
-                                        <td style="text-align:center;">
-                                            <span t-esc="record.name" style="float:center;"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <center><img t-att-src="'data:image/png;base64,%s' % to_text(record.qr)"
-                                             style="height:280px;width:280px;float:center;"/><br/>
-                                            <!-- <span t-esc="record.qr_code"  style="float:center;"/> -->
-                                            </center>
-                                        </td>
-                                    </tr>
-                                </table>
+                                    <table>
+                                        <tr>
+                                            <td style="text-align:center;">
+                                                <span t-esc="record.name" style="float:center;"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <center>
+                                                    <img t-att-src="'data:image/png;base64,%s' % to_text(record.qr)" style="height:280px;width:280px;float:center;"/>
+                                                    <br/>
+                                                    <!-- <span t-esc="record.qr_code" style="float:center;"/> -->
+                                                </center>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </center>
                             </div>
                         </t>

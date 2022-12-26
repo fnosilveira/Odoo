@@ -7,7 +7,7 @@
             file="itbrasil_qrcode_print.customer_qr_template"
             string="Product Badge"
             report_type="qweb-pdf"
-                menu="False"
+            menu="False"
         />
         <record id="itbrasil_qrcode_print.print_qr2" model="ir.actions.report">
             <field name="paperformat_id" ref="itbrasil_qrcode_print.customer_badge_paperformat"/>

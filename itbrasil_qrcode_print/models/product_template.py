@@ -9,7 +9,7 @@ except ImportError:
 from io import BytesIO
 import logging
 
-from odoo import models, fields, api, _, SUPERUSER_ID
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
@@ -21,9 +21,10 @@ class Products(models.Model):
 
     @api.depends('qr_code')
     def generate_qr(self):
-        logging.warning("GERANDO QR %s", self.qr_code)
+        logging.info("GERANDO QR %s", self.qr_code)
         if self.qr_code == False:
-            raise UserError(_('Não foi possivel gerar o QR Code. Verifique se o produto contám o campo QR Code preenchido.'))
+            raise UserError(
+                _('Não foi possivel gerar o QR Code. Verifique se o produto contém o campo QR Code preenchido.'))
         else:
             qr = qrcode.QRCode(
                 version=4,
@@ -49,11 +50,6 @@ class Products(models.Model):
             return self.env.ref('itbrasil_qrcode_print.print_qr2').report_action(
                 self, data={'data': self.id, 'type': 'all'})
 
-       
-    
     def get_product_by_qr(self, **args):
         return self.env['product.template'].search(
             [('sequence', '=', self.id), ], limit=1).id
-
-
-

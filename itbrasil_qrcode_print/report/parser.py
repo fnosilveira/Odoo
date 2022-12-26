@@ -8,7 +8,8 @@ class CustomerBadge(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         if data['type'] == 'all':
-            dat = [request.env['product.product'].search([('product_tmpl_id', '=', data['data'])])]
+            dat = [request.env['product.product'].search(
+                [('product_tmpl_id', '=', data['data'])])]
         return {
             'data': dat,
         }
