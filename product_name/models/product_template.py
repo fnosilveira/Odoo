@@ -6,4 +6,4 @@ class Products(models.Model):
 
     _inherit = "product.template"
 
-    descr_abrev = fields.Text (help="Descrição abreviada do produto", required=True, size=120) 
+    descr_abrev = fields.Char(help="Descrição abreviada do produto", required=True, size=120) 
