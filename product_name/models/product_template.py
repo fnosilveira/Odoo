@@ -1,8 +1,9 @@
 
-from odoo import fields, models
+from odoo import _,fields, models, api
+from odoo.exceptions import UserError, ValidationError 
 
 class Products(models.Model):
-    
+
     _inherit = "product.template"
-       
-    descr_abrev = fields.Text(size=30, required=False, help="Descrição abreviada do produto")
+
+    descr_abrev = fields.Text (help="Descrição abreviada do produto", required=True, size=120) 
