@@ -9,11 +9,12 @@
     'maintainer': 'IT Brasil',
     'company': 'IT Brasil',
     'website': 'https://www.itbrasil.com.br',
-    'depends': ['base'],
+    'depends': ['base', 'product'],
     'data': [
-        'views/zoom_image.xml',
-        
+        'static/src/xml/image_zoom.xml',
+        'views/product_template_form_view.xml',
     ],
+
     'installable': True,
     'application': False,
     'auto_install': False,
