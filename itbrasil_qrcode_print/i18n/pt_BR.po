@@ -1,0 +1,105 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* itbrasil_qrcode_print
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-09 18:22+0000\n"
+"PO-Revision-Date: 2023-01-09 15:24-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#. module: itbrasil_qrcode_print
+#: model:ir.actions.report,print_report_name:itbrasil_qrcode_print.report_product_product_qrcode
+#: model:ir.actions.report,print_report_name:itbrasil_qrcode_print.report_product_template_qrcode
+msgid "'Products QRCode - %s' % (object.name)"
+msgstr "QRCode - %s' % (object.name)"
+
+#. module: itbrasil_qrcode_print
+#: model_terms:ir.ui.view,arch_db:itbrasil_qrcode_print.product_template_form_view_qrcode
+msgid "<span class=\"o_stat_text\">Generate QR Code</span>"
+msgstr "<span class=\"o_stat_text\">Gerar Código QR</span>"
+
+#. module: itbrasil_qrcode_print
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_product_product__display_name
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_product_template__display_name
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_report_itbrasil_qrcode_print_report_product_qrcode__display_name
+msgid "Display Name"
+msgstr "Nome de Exibição"
+
+#. module: itbrasil_qrcode_print
+#: model_terms:ir.ui.view,arch_db:itbrasil_qrcode_print.product_template_form_view_qrcode
+msgid "Generate QR Code"
+msgstr "Gerar Código QR"
+
+#. module: itbrasil_qrcode_print
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_product_product__id
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_product_template__id
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_report_itbrasil_qrcode_print_report_product_qrcode__id
+msgid "ID"
+msgstr "ID"
+
+#. module: itbrasil_qrcode_print
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_product_product____last_update
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_product_template____last_update
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_report_itbrasil_qrcode_print_report_product_qrcode____last_update
+msgid "Last Modified on"
+msgstr "Última Modificação em"
+
+#. module: itbrasil_qrcode_print
+#: code:addons/itbrasil_qrcode_print/models/product_template.py:0
+#, python-format
+msgid "Necessary Requirements To Run This Operation Is Not Satisfied"
+msgstr "Os requisitos necessários para executar esta operação não são satisfeitos"
+
+#. module: itbrasil_qrcode_print
+#: model:ir.model,name:itbrasil_qrcode_print.model_product_product
+msgid "Product"
+msgstr "Produto"
+
+#. module: itbrasil_qrcode_print
+#: model:ir.actions.report,name:itbrasil_qrcode_print.report_product_product_qrcode
+msgid "Product QR Code"
+msgstr "Código QR do produto"
+
+#. module: itbrasil_qrcode_print
+#: model:ir.model,name:itbrasil_qrcode_print.model_report_itbrasil_qrcode_print_report_product_qrcode
+msgid "Product QR Code Report"
+msgstr "Relatório QR Code de Produto"
+
+#. module: itbrasil_qrcode_print
+#: model:ir.model,name:itbrasil_qrcode_print.model_product_template
+msgid "Product Template"
+msgstr "Modelo de Produto"
+
+#. module: itbrasil_qrcode_print
+#: model:ir.actions.report,name:itbrasil_qrcode_print.report_product_template_qrcode
+msgid "Product Template QR Code"
+msgstr "QR Code de Produtos"
+
+#. module: itbrasil_qrcode_print
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_product_product__qr_code
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_product_template__qr_code
+#: model_terms:ir.ui.view,arch_db:itbrasil_qrcode_print.product_template_form_view_qrcode
+msgid "QR Code"
+msgstr "QR Code"
+
+#. module: itbrasil_qrcode_print
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_product_product__qr
+#: model:ir.model.fields,field_description:itbrasil_qrcode_print.field_product_template__qr
+msgid "QR Code File"
+msgstr "Arquivo QR Code"
+
+#. module: itbrasil_qrcode_print
+#: code:addons/itbrasil_qrcode_print/models/product_template.py:0
+#, python-format
+msgid "You must enter QR Code number for %s before generating QR Code file."
+msgstr "Você deve informar o QR Code para %s antes de gerar a imagem."
