@@ -10,9 +10,11 @@
     'website': 'https://itbrasil.com.br',
     'depends': ['base'],
     'data': [
-        
+        'security/ir.model.access.csv',
+        'views/custom_fields_view.xml',
+
     ],
     'installable': True,
-    'application': False,
+    'application': True ,
     'auto_install': False,
 }

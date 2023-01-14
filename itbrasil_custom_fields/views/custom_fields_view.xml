@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+         <record id="custom_field_action" model="ir.actions.act_window">
+            <field name="name">Custom Fields</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">custom.fields</field>
+            <field name="view_mode">tree,kanban,form</field>
+         </record>
+        
+       
+        <menuitem
+            id="itbrasil_custom_fields_root"
+            name="Custom Fields"
+            sequence="10"/>
+        <menuitem
+            id="itbrasil_custom_fields_fields_root"
+            name="Fields"
+            parent="itbrasil_custom_fields_root"
+            sequence="10"/>
+        oo<menuitem
+            id="itbrasil_custom_fields_fields"
+            name="Fields"
+            action="custom_field_action"
+            parent="itbrasil_custom_fields_fields_root"
+            sequence="10"/>            
+    </data>
+</odoo>
