@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_search_view" model="ir.ui.view">
+        <field name="name">product_template_form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="short_description" string="Short Description" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_form_view_short_description" model="ir.ui.view">
+        <field name="name">product.template.common.form.short.description</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']" position="inside">
+                <group string="Short Description" name="group_short_description">
+                    <field name="short_description" nolabel="1" placeholder="This description will be used in many apps."/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

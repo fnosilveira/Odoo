@@ -1,48 +1,64 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <data>
-        <template id="customer_qr_template">
-            <t t-foreach="data" t-as="records">
-                <t t-foreach="records" t-as="record">
-                    <t t-call="web.html_container">
-                        <t t-call="web.internal_layout">
-                            <style>
-                                table{
-                                    border:1px solid black !important;
-                                    height:370px;
-                                    width:370px;
-                                }
-                                tr{
-                                    border:1px solid black !important;
-                                }
-                                td{
-                                    border:1px solid black !important;
-                                    font-size:30px;
-                                }
-                            </style>
-                            <div class="page">
-                                <center>
-                                <table>
-                                    <tr>
-                                        <td style="text-align:center;">
-                                            <span t-esc="record.name" style="float:center;"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <center><img t-att-src="'data:image/png;base64,%s' % to_text(record.qr)"
-                                             style="height:280px;width:280px;float:center;"/><br/>
-                                            <!-- <span t-esc="record.qr_code"  style="float:center;"/> -->
-                                            </center>
-                                        </td>
-                                    </tr>
-                                </table>
-                                </center>
-                            </div>
+        <template id="product_qr_template" inherit_id="product.report_simple_label">
+            <xpath expr="//table" position="inside">
+                <tr t-if="product.qr_code">
+                    <td class="text-center align-middle" style="height: 6rem">
+                        <t>
+                            <img t-att-src="'data:image/png;base64,%s' % to_text(product.qr)" style="width: 10rem; height: 10rem"/>
+                            <br></br>
+                            <span t-if="product.default_code != product.qr_code" t-field="product.qr_code"/>
+                        </t>
+                    </td>
+                </tr>
+            </xpath>
+        </template>
+
+        <template id="report_simple_qrcode">
+            <div style="width: 32%; display: inline-table; height: 10rem;">
+                <table class="table table-bordered mb-0" style="border: 2px solid black;">
+                    <tr>
+                        <th class="table-active text-left" style="height: 4rem;">
+                            <strong t-field="product.display_name"/>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="text-center align-middle" style="height: 6rem;">
+                            <t t-if="product.qr_code">
+                                <img t-att-src="'data:image/png;base64,%s' % to_text(product.qr)" style="width: 10rem; height: 10rem"/>
+                                <span t-field="product.qr_code"/>
+                            </t>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </template>
+
+        <template id="report_productqrcode">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <t t-foreach="docs" t-as="product">
+                        <t t-call="itbrasil_qrcode_print.report_simple_qrcode">
+                            <t t-set="product" t-value="product"/>
                         </t>
                     </t>
-                </t>
+                </div>
             </t>
         </template>
     </data>
+
+    <template id="report_producttemplateqrcode">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <t t-foreach="docs" t-as="template">
+                    <t t-foreach="template.product_variant_ids" t-as="product">
+                        <t t-call="product.report_simple_qrcode">
+                            <t t-set="product" t-value="product"/>
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
 </odoo>
