@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    # Cria uma aba no menu de configurações da empresa res.company e apresenta os campos de token e phone
+    
+    <record id="odoo_whats_res_company_form" model="ir.ui.view">
+        <field name="name">odoo_whats.res.company.form</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Whatsapp">
+                    <group>
+                        
+                        <field name="whatsapp_twillio_account"/>
+                        <field name="whatsapp_twillio_token"/>
+                        <field name="whatsapp_twillio_phone"/>
+                        <field name="whatsapp_twillio_SID"/>
+                        
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
