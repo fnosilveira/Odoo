@@ -31,7 +31,7 @@ class SaleOrder(models.Model):
             from_='whatsapp:' + self.company_id.whatsapp_twillio_phone.replace(' ', '').replace('-',''),
             to='whatsapp:' + self.partner_id.mobile.replace(' ', '').replace('-',''),
             ## SEND A LOCAL PDF ATTACHMENT TO THE CUSTOMER
-            media_url=['https://www.twilio.com/docs/documents/25/justthefaxmaam.pdf']
+            media_url=[url]
             
         )
         logging
