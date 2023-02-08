@@ -22,16 +22,16 @@ class SaleOrder(models.Model):
         auth_token = self.company_id.whatsapp_twillio_token
         client = Client(account_sid, auth_token)
         url = self.get_pdf_link()
-        url = url.replace('http://', 'https://')
-
         
+
+
         logging.warning(url)
         message = client.messages.create(
             body='Olá, ' + self.partner_id.name + ' seu pedido foi enviado com sucesso!',
             from_='whatsapp:' + self.company_id.whatsapp_twillio_phone.replace(' ', '').replace('-',''),
             to='whatsapp:' + self.partner_id.mobile.replace(' ', '').replace('-',''),
             ## SEND A LOCAL PDF ATTACHMENT TO THE CUSTOMER
-            media_url=[url]
+            media_url=['' + url + '']
             
         )
         logging
@@ -39,8 +39,9 @@ class SaleOrder(models.Model):
         return True
 
     def get_pdf_link(self):
+
         url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        url += '/report/pdf/sale.report_saleorder/' + str(self.id) 
+        url +=  '/my/orders/' + str(self.id) + '?access_token=' + self.access_token + '&report_type=pdf' + '&download=true'
         return url
         
 
