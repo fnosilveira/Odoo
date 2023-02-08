@@ -31,7 +31,6 @@ class SaleOrder(models.Model):
             body='Olá, ' + self.partner_id.name + ' seu pedido foi enviado com sucesso!',
             from_='whatsapp:' + self.company_id.whatsapp_twillio_phone.replace(' ', '').replace('-',''),
             to='whatsapp:' + self.partner_id.mobile.replace(' ', '').replace('-',''),
-            ## SEND A LOCAL PDF ATTACHMENT TO THE CUSTOMER
             media_url=['' + url + '']
             
         )
