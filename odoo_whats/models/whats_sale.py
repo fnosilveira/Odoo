@@ -34,8 +34,6 @@ class SaleOrder(models.Model):
             media_url=['' + url + '']
             
         )
-        logging
-        logging.info(message.sid)
         return True
 
     def get_pdf_link(self):
