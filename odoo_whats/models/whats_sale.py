@@ -22,6 +22,9 @@ class SaleOrder(models.Model):
         auth_token = self.company_id.whatsapp_twillio_token
         client = Client(account_sid, auth_token)
         url = self.get_pdf_link()
+        
+        
+
 
         logging.warning(url)
         message = client.messages.create(
@@ -40,8 +43,6 @@ class SaleOrder(models.Model):
 
         url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         url +=  '/my/orders/' + str(self.id) + '?access_token=' + self.access_token + '&report_type=pdf' + '&download=true'
-        # Nome do arquivo PDF que será enviado terá o nome do cliente e o número do pedido 
-        url += '&report_name=' + self.partner_id.name + ' - Pedido ' + str(self.name)
         return url
         
 
