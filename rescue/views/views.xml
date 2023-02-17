@@ -14,6 +14,16 @@
                 </tree>
             </field>
         </record> -->
+        <record id="action_update_order_status" model="ir.actions.server">
+            <field name="name">Update Orders</field>
+            <field name="model_id" ref="rescue.model_em_laundry_mgt_washings"/>
+            <field name="binding_model_id" ref="rescue.model_em_laundry_mgt_washings"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+ action = env['em.laundry.mgt.washings'].update_washings_status()
+            </field>
+        </record>
 
         <record id="rescue.other_than_wash_list" model="ir.ui.view">
             <field name="name">rescue_other_than_wash_list</field>
@@ -42,6 +52,7 @@
                     <field name="code"/>
                     <field name="date_assign"/>
                     <field name="date_work"/>
+                    <field name="comision" ref="em_laundry_mgt.comision"/>
                     <field name="washing_states"/>
                     <!-- <field name="comision"></field> -->
                 </tree>
@@ -55,7 +66,7 @@
             <field name="arch" type="xml">
                 <search string="Ordenes de Trabajo">
                     <field name="laundry_track_code"></field>
-              </search>
+                </search>
             </field>
         </record>
 
@@ -110,12 +121,9 @@
             <field name="arch" type="xml">
                 <form create="false">
                     <header>
-                        <button class="oe_highlight" name="start_wash" string="Start" type="object"
-                                attrs="{'invisible': [('washing_states', 'not in', ['draft','assign'])]}"/>
-                        <button class="oe_highlight" name="finish_wash" string="Finish" type="object"
-                                attrs="{'invisible': [('washing_states', 'not in', ['process','assign'])]}"/>
-                        <button class="oe_highlight" name="cancel_wash" string="Cancel" type="object"
-                                attrs="{'invisible': [('washing_states', 'in', ['process', 'done'])]}"/>
+                        <button class="oe_highlight" name="start_wash" string="Start" type="object" attrs="{'invisible': [('washing_states', 'not in', ['draft','assign'])]}"/>
+                        <button class="oe_highlight" name="finish_wash" string="Finish" type="object" attrs="{'invisible': [('washing_states', 'not in', ['process','assign'])]}"/>
+                        <button class="oe_highlight" name="cancel_wash" string="Cancel" type="object" attrs="{'invisible': [('washing_states', 'in', ['process', 'done'])]}"/>
                         <field name="washing_states" widget="statusbar" statusbar_visible="draft,process,done"/>
                     </header>
                     <sheet>
@@ -161,14 +169,11 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="is_laundry_order" invisible="1"/>
-                    <field name="responsible_person"
-                           attrs="{'invisible': [('is_laundry_order', '=', False)], 'required': [('is_laundry_order', '=', True)]}"/>
+                    <field name="responsible_person" attrs="{'invisible': [('is_laundry_order', '=', False)], 'required': [('is_laundry_order', '=', True)]}"/>
                     <field name="all_done" invisible="1"/>
                 </xpath>
                 <xpath expr="//sheet/div[hasclass('oe_button_box')]" position="inside">
-                    <button class="oe_stat_button" name="washings_list" type="object"
-                            icon="fa-cogs"
-                            attrs="{'invisible': ['|', ('state', 'in', ['draft','order']), ('is_laundry_order', '=', False)]}">
+                    <button class="oe_stat_button" name="washings_list" type="object" icon="fa-cogs" attrs="{'invisible': ['|', ('state', 'in', ['draft','order']), ('is_laundry_order', '=', False)]}">
                         <field string="Works" name="washing_count" widget="statinfo"/>
                     </button>
                 </xpath>
@@ -187,69 +192,37 @@
                 </xpath>
 
                 <xpath expr="//header/button[last()]" position="after">
-                    <button name="set_to_process"
-                            string="Send for Wash"
-                            class="oe_highlight"
-                            type="object"
-                            attrs="{'invisible': [('state', 'not in', ['order'])]}"/>
-                    <button name="action_confirm"
-                            string="Set for Invoice"
-                            class="oe_highlight"
-                            type="object"
-                            attrs="{'invisible': ['|',('all_done', '=', False),('state', 'not in', ['draft'])]}"/>
-                    <button name="generate_invoice"
-                            string="Create Invoice"
-                            class="oe_highlight"
-                            type="object"
-                            attrs="{'invisible': ['|','|',('all_done', '=', False),('state', 'not in', ['sale']),('invoice_status', '!=', 'to invoice')]}"/>
-                    <button name="return_laundry"
-                            string="Return"
-                            class="oe_highlight"
-                            type="object"
-                            attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
-                    <button name="print_tracking_code"
-                            string="Print Tracking Code Tags"
-                            class="oe_highlight"
-                            type="object"
-                            icon="fa-print"
-                            attrs="{'invisible': ['|',('is_laundry_order', '=', False), ('state','in',['draft'])]}"/>
+                    <button name="set_to_process" string="Send for Wash" class="oe_highlight" type="object" attrs="{'invisible': [('state', 'not in', ['order'])]}"/>
+                    <button name="action_confirm" string="Set for Invoice" class="oe_highlight" type="object" attrs="{'invisible': ['|',('all_done', '=', False),('state', 'not in', ['draft'])]}"/>
+                    <button name="generate_invoice" string="Create Invoice" class="oe_highlight" type="object" attrs="{'invisible': ['|','|',('all_done', '=', False),('state', 'not in', ['sale']),('invoice_status', '!=', 'to invoice')]}"/>
+                    <button name="return_laundry" string="Return" class="oe_highlight" type="object" attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+                    <button name="print_tracking_code" string="Print Tracking Code Tags" class="oe_highlight" type="object" icon="fa-print" attrs="{'invisible': ['|',('is_laundry_order', '=', False), ('state','in',['draft'])]}"/>
                 </xpath>
 
-                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_id']"
-                       position="before">
-                       <field name="line_number"/>
+                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_id']" position="before">
+                    <field name="line_number"/>
                 </xpath>
 
-                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='name']"
-                       position="after">
-                    <field name="laundry_track_code"
-                           attrs="{'column_invisible': ['|',('parent.is_laundry_order', '=', False), ('parent.state','in',['draft'])]}"/>
-                    <field name="dress_count_in"
-                           attrs="{'column_invisible': [('parent.is_laundry_order', '=', False)], 'required': [('parent.is_laundry_order', '=', True)]}"/>
-                    <field name="dress_count_out"
-                           attrs="{'column_invisible': [('parent.state', 'not in', ['complete', 'return'])]}"/>
-                    <!-- <field name="wash_type_id"
-                           attrs="{'column_invisible': [('parent.is_laundry_order', '=', False)], 'required': [('parent.is_laundry_order', '=', True)]}"/> -->
+                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='name']" position="after">
+                    <field name="laundry_track_code" attrs="{'column_invisible': ['|',('parent.is_laundry_order', '=', False), ('parent.state','in',['draft'])]}"/>
+                    <field name="dress_count_in" attrs="{'column_invisible': [('parent.is_laundry_order', '=', False)], 'required': [('parent.is_laundry_order', '=', True)]}"/>
+                    <field name="dress_count_out" attrs="{'column_invisible': [('parent.state', 'not in', ['complete', 'return'])]}"/>
+                    <!-- <field name="wash_type_id" attrs="{'column_invisible': [('parent.is_laundry_order', '=', False)], 'required': [('parent.is_laundry_order', '=', True)]}"/> -->
                     <field name="product_type" invisible="True"/>
-                    <field name="other_than_wash_ids" widget="many2many_tags"
-                           attrs="{
+                    <field name="other_than_wash_ids" widget="many2many_tags" attrs="{
                            'column_invisible': [('parent.is_laundry_order', '=', False)], 
-                           'required': [('parent.is_laundry_order', '=', True), ('product_type','=','service')]}"/> 
-                    <field name="state_per_washing"
-                           attrs="{'column_invisible': [('parent.is_laundry_order', '=', False)]}"/>
+                           'required': [('parent.is_laundry_order', '=', True), ('product_type','=','service')]}"/>
+                    <field name="state_per_washing" attrs="{'column_invisible': [('parent.is_laundry_order', '=', False)]}"/>
                 </xpath>
-                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_uom_qty']"
-                       position="attributes">
+                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_uom_qty']" position="attributes">
                     <attribute name="attrs">{'column_invisible': [('parent.is_laundry_order','=',True)]}</attribute>
                 </xpath>
-                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='qty_delivered']"
-                       position="attributes">
+                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='qty_delivered']" position="attributes">
                     <attribute name="attrs">{'column_invisible': ['|', ('parent.is_laundry_order','=',True),
                         ('parent.state', 'not in', ['sale', 'done'])]}
                     </attribute>
                 </xpath>
-                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='qty_invoiced']"
-                       position="attributes">
+                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='qty_invoiced']" position="attributes">
                     <attribute name="attrs">{'column_invisible': ['|', ('parent.is_laundry_order','=',True),
                         ('parent.state', 'not in', ['sale', 'done'])]}
                     </attribute>
@@ -267,8 +240,7 @@
                     <br/>
                 </xpath>
                 <notebook>
-                    <page string="Charges" attrs="{'invisible': [('is_wash_type_clothe','=',False)]}"
-                          autofocus="autofocus">
+                    <page string="Charges" attrs="{'invisible': [('is_wash_type_clothe','=',False)]}" autofocus="autofocus">
                         <group string="Laundry Work Charges">
                             <!-- <group>
                                 <field name="washing_charge_ids" nolabel="1">
@@ -302,12 +274,9 @@
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="is_laundry_invoice" invisible="1"/>
                 </xpath>
-                <xpath expr="//page[@id='invoice_tab']/field[@name='invoice_line_ids']/tree/field[@name='name']"
-                       position="after">
-                    <!-- <field name="wash_type_id"
-                           attrs="{'column_invisible': [('parent.is_laundry_invoice', '=', False)]}"/> -->
-                    <field name="other_than_wash_ids" widget="many2many_tags"
-                           attrs="{'column_invisible': [('parent.is_laundry_invoice', '=', False)]}"/>
+                <xpath expr="//page[@id='invoice_tab']/field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+                    <!-- <field name="wash_type_id" attrs="{'column_invisible': [('parent.is_laundry_invoice', '=', False)]}"/> -->
+                    <field name="other_than_wash_ids" widget="many2many_tags" attrs="{'column_invisible': [('parent.is_laundry_invoice', '=', False)]}"/>
                 </xpath>
             </field>
         </record>
