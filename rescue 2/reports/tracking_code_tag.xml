@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="tracking_code_tag">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <hr/>
+                        <t t-foreach="rec['order_lines']" t-as="line">
+                            <table style="width:100%; font-size:8px; text-align: center;" border="1">
+                                <tr>
+                                    <td>
+                                        <strong>Tracking Code :</strong>
+                                        <t t-esc="line['laundry_track_code']"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <!-- <td>
+                                        <strong>Customer Name:</strong>
+                                        <t t-esc="rec['customer_name']"/>
+                                    </td>  -->
+                                    <td>
+                                        <strong>Laundry Person:</strong>
+                                        <t t-esc="rec['laundry_person']"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Cloth Name :</strong>
+                                        <t t-esc="line['cloth_name']"/>
+                                    </td>
+                                    <!-- <td>
+                                        <strong>Quantity Received:</strong>
+                                        <t t-esc="line['quantity_in']"/>
+                                    </td> -->
+                                    <!-- <td>
+                                        <strong>Wash Type:</strong>
+                                        <t t-esc="line['wash_type']"/>
+                                    </td> -->
+                                </tr>
+                                <tr>
+                                    <t t-if="line['other_than_wash']">
+                                        <td>
+                                            <strong>Servicios:</strong>
+                                            <ul>
+                                                <t t-foreach="line['other_than_wash']" t-as="extra">
+                                                    <li>
+                                                        <t t-esc="extra"/>
+                                                    </li>
+                                                </t>
+                                            </ul>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <!-- <tr>
+                                    <td>
+                                        <strong>Traking Barcode:</strong>
+                                        <br/>
+                                        <img t-if="line['laundry_track_code']"
+                                             t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',line['laundry_track_code'],250,35)"/>
+                                    </td>
+                                </tr> -->
+                                
+                            </table>
+                            
+                            <span class="fa fa-scissors" style="border-top:2px dotted; width:100%"/>
+                            
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <record id="paperformat_tracking_code_tag" model="report.paperformat">
+            <field name="name">Ticket</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">200</field>
+            <field name="page_width">40</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">1</field>
+            <field name="margin_bottom">1</field>
+            <field name="margin_left">1</field>
+            <field name="margin_right">1</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="print_tracking_code_tag_action" model="ir.actions.report">
+            <field name="name">Tracking Code</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="model">sale.order</field>
+            <field name="report_name">rescue.tracking_code_tag</field>
+            <field name="paperformat_id" ref="rescue.paperformat_tracking_code_tag"/>
+        </record>
+    </data>
+</odoo>

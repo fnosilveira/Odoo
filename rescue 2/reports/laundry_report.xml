@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_laundry_sale_order_document_inherit" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div/table/tbody/t/tr/t/td[1]" position="inside">
+            <t t-if="doc.is_laundry_order">
+                <table class="table table-borderless">
+                    <!-- <tr style="padding: 0 !important; margin: 0 !important;">
+                        <td width="80%" style="padding: 0 !important; margin: 0 !important;">
+                            <span class="ml-5" t-esc="line.wash_type_id.name"/>
+                        </td>
+                        <td width="20%" class="text-right o_price_total"
+                            style="padding: 0 !important; margin: 0 !important;">
+                            <span t-esc="line.get_wash_type_charge(line.wash_type_id.id, line.product_id.id)"/>
+                        </td>
+                    </tr> -->
+                    <t t-if="line.other_than_wash_ids">
+                        <t t-foreach="line.other_than_wash_ids" t-as="work">
+                            <tr style="padding: 0 !important; margin: 0 !important;">
+                                <td width="80%" style="padding: 0 !important; margin: 0 !important;">
+                                    <span class="ml-5" t-esc="work.name"/>
+                                </td>
+                                <td width="20%" class="text-right o_price_total"
+                                    style="padding: 0 !important; margin: 0 !important;">
+                                    <span t-esc="line.get_other_than_wash_charge(work.id, line.product_id.id)"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </table>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="report_laundry_invoice_document_inherit" inherit_id="account.report_invoice_document">
+        <xpath expr="//div/table/tbody/t/tr/t/td[1]" position="inside">
+            <t t-if="o.is_laundry_invoice">
+                <table class="table table-borderless">
+                    <!-- <tr style="padding: 0 !important; margin: 0 !important;">
+                        <td width="80%" style="padding: 0 !important; margin: 0 !important;">
+
+                            <span class="ml-5" t-esc="line.wash_type_id.name"/>
+                        </td>
+                        <td width="20%" class="text-right o_price_total"
+                            style="padding: 0 !important; margin: 0 !important;">
+                            <span t-esc="line.get_wash_type_charge(line.wash_type_id.id, line.product_id.id)"/>
+                        </td>
+                    </tr> -->
+                    <t t-if="line.other_than_wash_ids">
+                        <t t-foreach="line.other_than_wash_ids" t-as="work">
+                            <tr style="padding: 0 !important; margin: 0 !important;">
+                                <td width="80%" style="padding: 0 !important; margin: 0 !important;">
+                                    <span class="ml-5" t-esc="work.name"/>
+                                </td>
+                                <td width="20%" class="text-right o_price_total"
+                                    style="padding: 0 !important; margin: 0 !important;">
+                                    <span t-esc="line.get_other_than_wash_charge(work.id, line.product_id.id)"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </table>
+            </t>
+        </xpath>
+    </template>
+</odoo>

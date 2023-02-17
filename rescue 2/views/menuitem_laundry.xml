@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Top menu item -->
+
+        <menuitem name="Laundry" id="rescue.menu_root" groups="rescue.group_rescue_user,rescue.group_rescue_manager"/>
+
+        <!-- menu categories -->
+
+        <menuitem name="Configuration" id="rescue.menu_1" parent="rescue.menu_root"
+                  sequence="55" groups="rescue.group_rescue_manager"/>
+        <menuitem name="Wash" id="rescue.menu_2" parent="rescue.menu_root" groups="rescue.group_rescue_manager"/>
+        <menuitem name="Washings" id="rescue.menu_3" parent="rescue.menu_root" groups="rescue.group_rescue_user,rescue.group_rescue_manager"/>
+        <menuitem name="Laundry Work" id="rescue.menu_4" parent="rescue.menu_1"/>
+        <menuitem id="menu_laundry_report" name="Reporting" parent="rescue.menu_root" groups="rescue.group_rescue_manager"/>
+        <menuitem id="menu_laundry_cloth_wash_type" name="Clothe Type" parent="rescue.menu_root" groups="rescue.group_rescue_manager"/>
+
+        <!-- actions -->
+
+        <menuitem name="Laundry Wash" id="rescue.menu_wash" parent="rescue.menu_2"
+                  action="rescue.action_window_wash"/>
+        <!-- <menuitem name="Wash Type" id="rescue.menu_wash_type" parent="rescue.menu_4"
+                  action="rescue.action_window_wash_type"/> -->
+        <menuitem name="Other Than Wash" id="rescue.menu_other_than_wash"
+                  parent="rescue.menu_4"
+                  action="rescue.action_window_other_than_wash"/>
+        
+        <menuitem name="All Washings" id="rescue.menu_washings"
+                  parent="rescue.menu_3"
+                  action="rescue.action_window_washing"/>
+
+        <menuitem name="Operaciones externas" id="rescue.menu_washings_external"
+                  parent="rescue.menu_3"
+                  action="rescue.action_window_washing_external"
+                  groups="rescue.group_rescue_manager"/>
+
+        <menuitem name="Washing Clothes Type" id="rescue.menu_cloths"
+                  parent="rescue.menu_laundry_cloth_wash_type"
+                  action="rescue.action_window_cloths"/>
+        <menuitem id="menu_report_laundry_all"
+                  name="Wash Orders"
+                  action="rescue.action_order_report_all"
+                  parent="menu_laundry_report"
+        />
+        <menuitem
+            id="menu_report_laundry_management"
+            action="rescue.action_laundry_management_wizard"
+            parent="menu_laundry_report"
+        />
+    </data>
+</odoo>

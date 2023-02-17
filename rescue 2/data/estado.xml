@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rescue_model_em_laundry_mgt_washings_action_confirm" model="ir.actions.server">
+        <field name="name">Confirmar Servicios</field>
+        <field name="model_id" ref="rescue.model_em_laundry_mgt_washings"/>
+        <!-- <field name="binding_model_id" ref="rescue.model_em_laundry_mgt_washings"/> -->
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            <!-- action = self.env.ref('rescue.model_em_laundry_mgt_washings').read()[0]
+            action['views'] = [('state_per_washing', '=', 'done')]
+            return action -->
+        </field>
+    </record>
+</odoo>

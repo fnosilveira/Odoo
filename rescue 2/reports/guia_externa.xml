@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--added by focuss-->
+        <template id="guia_externa">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <t t-set="datas" t-value="o._get_datas()"/>
+                        <t t-foreach="datas" t-as="d">
+                            <div class="page">
+                                <div>
+                                    <b>GUIA:</b> <t t-esc="d['guide']"/><br/>
+                                    <b>CAJERO:</b> <t t-esc="d['user']"/><br/>
+                                    <b>FECHA:</b> <t t-esc="d['date']" t-options="{'widget':'date'}"/><br/>
+                                    <b>NOMBRE DE TALLER :</b> <t t-esc="d['responsible']"/>`<br/>
+                                </div>
+                                <t t-set="item" t-value="0"/>
+                                <hr/>
+                                <br/>
+                                <table class="table table-sm oe_main_table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">ITEM</th>
+                                            <th class="text-center">CODIGO</th>
+                                            <th class="text-center">SERVICIO</th>
+                                            <th class="text-center">PRECIO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="d['data']" t-as="val">
+                                            <t t-set="item" t-value="item+1"/>
+                                            <td><t t-esc="item"/></td>
+                                            <td><t t-esc="val['code']"/></td>
+                                            <td><t t-esc="val['name']"/></td>
+                                            <td/>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_guia_externa" model="ir.actions.report">
+            <field name="name">Guia Externo</field>
+            <field name="model">report.laundry.management.external</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">rescue.guia_externa</field>
+            <field name="report_file">rescue.guia_externa</field>
+            <field name="print_report_name">('Guia Taller - %s' % (object.guide))</field>
+            <field name="binding_model_id" ref="model_report_laundry_management_external"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="paperformat_custom_guia" model="report.paperformat">
+            <field name="name">Guia Externo</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">32</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+        <record id="rescue.action_guia_externa" model="ir.actions.report">
+            <field name="paperformat_id" ref="rescue.paperformat_custom_guia" />
+        </record>
+    </data>
+</odoo>

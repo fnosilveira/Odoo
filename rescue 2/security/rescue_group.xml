@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.module.category" id="module_rescue" >
+		<field name="name">Lavanderia</field>
+        <field name="sequence">20</field>
+	</record>
+
+    <record id="group_rescue_user" model="res.groups">
+        <field name="name">Usuario</field>
+        <field name="category_id" ref="module_rescue"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <record id="group_rescue_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_rescue"/>
+        <field name="implied_ids" eval="[(4, ref('rescue.group_rescue_user'))]"/>
+    </record>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+   <data>
+       <!-- <act_window
+            id="action_wizard_action"
+            name="Marcar como realizado"
+            res_model="wizard.action"
+            src_model="em.laundry.mgt.washings"
+            view_mode="form"
+            multi="True"
+            target="new"
+            key2="client_action_multi"
+        /> -->
+
+        
+    </data>
+</odoo>
