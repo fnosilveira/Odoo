@@ -193,10 +193,10 @@
 
                 <xpath expr="//header/button[last()]" position="after">
                     <button name="set_to_process" string="Send for Wash" class="oe_highlight" type="object" attrs="{'invisible': [('state', 'not in', ['order'])]}"/>
-                    <button name="action_confirm" string="Set for Invoice" class="oe_highlight" type="object" attrs="{'invisible': ['|',('all_done', '=', False),('state', 'not in', ['draft'])]}"/>
-                    <button name="generate_invoice" string="Create Invoice" class="oe_highlight" type="object" attrs="{'invisible': ['|','|',('all_done', '=', False),('state', 'not in', ['sale']),('invoice_status', '!=', 'to invoice')]}"/>
+                    <button name="action_confirm" string="Set for Invoice" class="oe_highlight" type="object" attrs="{'invisible': [('state', 'not in', ['process'])]}"/>
+                    <button name="generate_invoice" string="Create Invoice" class="oe_highlight" type="object" attrs="{'invisible': [('state', 'not in', ['sale'])]}"/>
                     <button name="return_laundry" string="Return" class="oe_highlight" type="object" attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
-                    <button name="print_tracking_code" string="Print Tracking Code Tags" class="oe_highlight" type="object" icon="fa-print" attrs="{'invisible': ['|',('is_laundry_order', '=', False), ('state','in',['draft'])]}"/>
+                    <button name="print_tracking_code" string="Print Tracking Code Tags" class="oe_highlight" type="object" icon="fa-print" attrs="{}"/>
                 </xpath>
 
                 <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_id']" position="before">

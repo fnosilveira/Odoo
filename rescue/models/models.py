@@ -4,7 +4,11 @@ import datetime
 from lxml import etree
 from odoo import models, fields, api, _
 import logging
+
+from odoo.exceptions import ValidationError
+
 _logger = logging.getLogger(__name__)
+
 
 # class WashType(models.Model):
 # 	_name = "em.laundry.mgt.wash.type"
@@ -46,7 +50,7 @@ class Washings(models.Model):
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True, default='draft', copy=False)
     laundry_track_code = fields.Char('Tracking Code')
-    # is_make_over = fields.Boolean('Make Over')
+    is_make_over = fields.Boolean('Make Over')
     is_make_over_text = fields.Char()
     trabajo_externo = fields.Boolean('Trabajo externo')
     code = fields.Char(string="Code", copy=False)
@@ -67,44 +71,20 @@ class Washings(models.Model):
     def start_wash(self):
         self.washing_states = 'process'
         # if not self.is_make_over:
-        self.responsible_person = self.env.user
+        self.responsible_person = self.env.user.id
         self.order_line_id.state_per_washing = 'wash'
         self.date_work = datetime.datetime.now()
 
     def finish_wash(self):
         self.washing_states = 'done'
-        self.order_line_id.state_per_washing = 'done'
-        # line = self.order_line_id
-
-        # if line.other_than_wash_ids:
-        # 	obj_ids = self.env['em.laundry.mgt.washings'].search(
-        # 		[('is_make_over', '=', True), ('order_line_id', '=', line.id)])
-        # 	if obj_ids:
-        # 		for obj in obj_ids:
-        # 			if obj.washing_states == 'done':
-        # 				pass
-        # 			else:
-        # 				return
-        # 			self.order_line_id.state_per_washing = 'done'
-        # 	else:
-        # 		for other_than in line.other_than_wash_ids:
-        # 			if line.state_per_washing != 'other_than_wash':
-        # 				self.env['em.laundry.mgt.washings'].create({'name': other_than.name,
-        # 															'responsible_person': other_than.responsible_person.id,
-        # 															'date_time': datetime.datetime.now(),
-        # 															'cloth': line.product_id.name,
-        # 															'cloth_count': line.dress_count_in,
-        # 															'description': line.name,
-        # 															'order_id': line.order_id.id,
-        # 															'order_line_id': line.id,
-        # 															'is_make_over': True,
-        # 															'is_make_over_text': 'Make Over',
-        # 															'laundry_track_code': line.laundry_track_code,
-        # 															'trabajo_externo':other_than.trabajo_externo
-        # 															})
-        # 		self.order_line_id.state_per_washing = 'other_than_wash'
-        # else:
-        # 	self.order_line_id.state_per_washing = 'done'
+        # Atualiza o estado de todas as linhas do pedido
+        line = self.env['sale.order.line'].search(
+            [('order_id', '=', self.order_id.id)])
+        for l in line:
+            if l.state_per_washing != 'done':
+                return
+        self.order_id.state = 'done'
+        
 
     def cancel_wash(self):
         self.washing_states = 'cancel'
@@ -170,22 +150,28 @@ class SaleOrderExtend(models.Model):
                 item.laundry_track_code = self.name + '-' + str(numero)
                 numero += 1
 
-    def _create_invoices(self, grouped=False, final=False):
-        result = super(SaleOrderExtend, self)._create_invoices(grouped, final)
-        if self.is_laundry_order:
-            for line in self.order_line:
-                for invoice_line_id in line.invoice_lines:
-                    invoice_line_id.move_id.is_laundry_invoice = True
-                    for invoice_line in result.invoice_line_ids:
-                        if invoice_line.id == invoice_line_id.id:
-                            # invoice_line.wash_type_id = line.wash_type_id
-                            invoice_line.other_than_wash_ids = line.other_than_wash_ids
+   
 
-        return result
+    def _action_cancel(self):
+        inv = self.invoice_ids.filtered(lambda inv: inv.state == 'draft')
+        inv.button_cancel()
+        return self.write({'state': 'cancel'})
 
     def generate_invoice(self):
-        self._create_invoices()
-        self.state = 'complete'
+        #Verificar se já existe uma fatura para o pedido de lavanderia
+        if self.invoice_ids:
+            raise ValidationError(
+                'Já existe uma fatura para este pedido de lavanderia')
+        else:
+            invoice_data = self.env['sale.advance.payment.inv'].create({
+            'advance_payment_method': 'delivered'
+        })
+        invoice_data.with_context(active_ids=self.ids).create_invoices()
+        
+        
+        
+
+        
 
     def action_confirm(self):
         self.enumerar_item()
@@ -209,7 +195,7 @@ class SaleOrderExtend(models.Model):
                                                                     'description': line.name,
                                                                     'order_id': line.order_id.id,
                                                                     'order_line_id': line.id,
-                                                                    # 'is_make_over': True,
+                                                                    'is_make_over': True,
                                                                     'is_make_over_text': 'Servicios',  # cambios quimer -- Washing
                                                                     'laundry_track_code': line.laundry_track_code,
                                                                     'trabajo_externo': other_than.trabajo_externo,
