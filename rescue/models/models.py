@@ -97,6 +97,17 @@ class LaundryTrackTag(models.AbstractModel):
     def _get_report_values(self, docids, data=None):
         return data
 
+class SaleAdvancePaymentInv(models.TransientModel):
+    _inherit = "sale.advance.payment.inv"
+
+    def _create_invoice(self, order, so_line, amount):
+        #Verifica o tipo do faturamento, se for percentual ou valor fixo ele emite um erro ao usuário
+        if self.advance_payment_method == 'percentage':
+            raise ValidationError(
+                'Não é possível faturar um pedido de lavanderia com percentual')
+        if self.advance_payment_method == 'fixed':
+            raise ValidationError(
+                'Não é possível faturar um pedido de lavanderia com valor fixo')
 
 class SaleOrderExtend(models.Model):
     _inherit = "sale.order"
@@ -158,15 +169,23 @@ class SaleOrderExtend(models.Model):
         return self.write({'state': 'cancel'})
 
     def generate_invoice(self):
-        #Verificar se já existe uma fatura para o pedido de lavanderia
-        if self.invoice_ids:
-            raise ValidationError(
-                'Já existe uma fatura para este pedido de lavanderia')
-        else:
-            invoice_data = self.env['sale.advance.payment.inv'].create({
-            'advance_payment_method': 'delivered'
-        })
-        invoice_data.with_context(active_ids=self.ids).create_invoices()
+        # Call invoice wizard method to create invoice from SO and choose the option to create invoice.
+
+        return {
+            'name': _('Create Invoice'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'sale.advance.payment.inv',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'active_ids': self.ids,
+                'active_model': 'sale.order',
+                'default_advance_payment_method': 'delivered',
+            },
+        }
+
+
+
         
         
         
