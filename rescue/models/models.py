@@ -63,6 +63,9 @@ class Washings(models.Model):
             self.env.context.get('active_ids'))
         washings.write({'washing_states': "done",
                         'date_work': datetime.datetime.now()})
+        washings.order_line_id.state_per_washing = 'done'
+        
+        
 
     # def comisiones(self):
     # 	self.em_laundry_other_than_wash_comision = self.env['em.laundry.other.than.wash'].search([], limit=1)
@@ -77,13 +80,19 @@ class Washings(models.Model):
 
     def finish_wash(self):
         self.washing_states = 'done'
-        # Atualiza o estado de todas as linhas do pedido
-        line = self.env['sale.order.line'].search(
-            [('order_id', '=', self.order_id.id)])
-        for l in line:
-            if l.state_per_washing != 'done':
-                return
-        self.order_id.state = 'done'
+        # Verifica se todas a linhas do wash_state estão como done e atualiza o status do pedido no campo all_done
+        if self.order_id.washing_count == self.env['em.laundry.mgt.washings'].search_count([('order_id', '=', self.order_id.id), ('washing_states', '=', 'done')]):
+            self.order_id.all_done = True
+        self.order_line_id.state_per_washing = 'done'
+
+
+    @api.depends('washing_states')
+    def _compute_wash_state(self):
+        for rec in self:
+            if rec.washing_states == 'done':
+                rec.is_done = True
+            else:
+                rec.is_done = False
         
 
     def cancel_wash(self):
@@ -100,14 +109,14 @@ class LaundryTrackTag(models.AbstractModel):
 class SaleAdvancePaymentInv(models.TransientModel):
     _inherit = "sale.advance.payment.inv"
 
-    def _create_invoice(self, order, so_line, amount):
-        #Verifica o tipo do faturamento, se for percentual ou valor fixo ele emite um erro ao usuário
-        if self.advance_payment_method == 'percentage':
-            raise ValidationError(
-                'Não é possível faturar um pedido de lavanderia com percentual')
-        if self.advance_payment_method == 'fixed':
-            raise ValidationError(
-                'Não é possível faturar um pedido de lavanderia com valor fixo')
+    # def _create_invoice(self, order, so_line, amount):
+    #     #Verifica o tipo do faturamento, se for percentual ou valor fixo ele emite um erro ao usuário
+    #     if self.advance_payment_method == 'percentage':
+    #         raise ValidationError(
+    #             'Não é possível faturar um pedido de lavanderia com percentual')
+    #     if self.advance_payment_method == 'fixed':
+    #         raise ValidationError(
+    #             'Não é possível faturar um pedido de lavanderia com valor fixo')
 
 class SaleOrderExtend(models.Model):
     _inherit = "sale.order"
@@ -161,8 +170,6 @@ class SaleOrderExtend(models.Model):
                 item.laundry_track_code = self.name + '-' + str(numero)
                 numero += 1
 
-   
-
     def _action_cancel(self):
         inv = self.invoice_ids.filtered(lambda inv: inv.state == 'draft')
         inv.button_cancel()
@@ -183,14 +190,6 @@ class SaleOrderExtend(models.Model):
                 'default_advance_payment_method': 'delivered',
             },
         }
-
-
-
-        
-        
-        
-
-        
 
     def action_confirm(self):
         self.enumerar_item()
@@ -238,6 +237,8 @@ class SaleOrderExtend(models.Model):
                 # 											'trabajo_externo':line.wash_type_id.trabajo_externo
                 # 											})
             self.state = 'process'
+            for line in self.order_line:
+                line.state_per_washing = 'wash'
 
     def washings_list(self):
         return {
