@@ -8,9 +8,7 @@ class ProductProduct(models.Model):
     _inherit = "product.product"
 
     short_description = fields.Char(
-        help="Short product description",
-        size=120,
-        translate=True,
+        related='product_tmpl_id.short_description',
     )
 
 
@@ -18,5 +16,9 @@ class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     short_description = fields.Char(
-        related="product_variant_ids.short_description", readonly=False
+        help="Short product description",
+        size=120,
+        translate=True,
+        store=True
+        
     )
